@@ -6,6 +6,7 @@
 //--------------------------------------------------------------------
 // Name:                      Version:                    Date:
 // Guillermo Hernandez        1.0 Created file            12/04/2020
+// Anthony Dyer                                           12/8/2020
 //
 //--------------------------------------------------------------------
 #include <LiquidCrystal.h>    // For LCD display
