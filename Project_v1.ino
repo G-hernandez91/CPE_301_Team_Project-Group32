@@ -210,11 +210,11 @@ void write_pc(unsigned char pin, unsigned char state)
 
 }
 //NEED: push button handler subroutine. The push button should force state change to disabled (or from disabled to idle)
-void button_switch(unsigned int _switch)
+void button_switch(unsigned int sub_switch)
 {
    unsigned int sub_switch = 0;
 
-  if(_switch == 1)
+  if(sub_switch == 1)
   {  
     sub_switch = _switch;
   }
@@ -227,7 +227,7 @@ void button_switch(unsigned int _switch)
     write_pa(2,1);
     write_pa(3,0);
 
-    if(_switch == 1)
+    if(sub_switch == 1)
     {
     sub_switch = 0; 
     }
