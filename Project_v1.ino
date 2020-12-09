@@ -84,6 +84,7 @@ void loop()
   //initilize variables
   float temperature;
   float humidity;
+<<<<<<< HEAD
   float threshold = 20;
   
   //state is diabled: light yellow LED, wait until enabled
@@ -109,6 +110,9 @@ void loop()
   humidity = 0;
 
   //print temp and humidity
+=======
+  
+>>>>>>> eec8b10b4fff070c2a9221c9ee0d7120133b08c9
   lcd.print( "T = " );
   lcd.print( temperature, 1 );
   lcd.print( " deg. C," );
