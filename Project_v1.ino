@@ -30,8 +30,9 @@
 //
 //vent pot: PF0/ADC0 (Analog Pin 0) (INPUT)
 //
+//DC motor command: PF3 (Analog Pin 2) (OUTPUT)
 //NEED: update port register definitions, etc. to reflect built circuit
-//NEED: ADD/FIGURE OUT STEPPER FOR VENT AND DC MOTOR FOR FAN
+//NEED: ADD/FIGURE OUT STEPPER FOR VENT
 
 // Definitions:
 
@@ -66,6 +67,7 @@ void setup()
   //initilize data directions
   *ddr_a = 0x0F;
   *ddr_c = 0x3F;
+  *ddr_f = 0x0F;
   
   //adc_init();
 
@@ -102,7 +104,7 @@ void loop()
   // }
   
   //NEED: read temp and humidity
-  temperature = 30;
+  temperature = 0;
   humidity = 0;
 
   //print temp and humidity
@@ -126,6 +128,7 @@ void loop()
     write_pa(3,0);
 
     //disable fan motor
+    write_pf(3,0);
     break;
   }
   
@@ -139,6 +142,7 @@ void loop()
     write_pa(3,0);
 
     //enable fan motor
+    write_pf(3,1);
     break;
   }
 
@@ -154,6 +158,19 @@ void write_pa(unsigned char pin, unsigned char state)
   else
   {
     *port_a |= 0x01 << pin;
+  }
+  
+}
+
+void write_pf(unsigned char pin, unsigned char state)
+{
+  if(state == 0)
+  {
+    *port_f &= ~(0x01 << pin);
+  }
+  else
+  {
+    *port_f |= 0x01 << pin;
   }
   
 }
