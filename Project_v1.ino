@@ -25,7 +25,7 @@
 //yellow LED: PA2 (Dig Pin 24) (OUTPUT)
 //red LED: PA3 (Dig Pin 25) (OUTPUT)
 //
-//ball switch: PA6 (Dig Pin 28) (INPUT)
+//ball switch: PF2 (Analog Pin 2) (INPUT)
 //DHT11: PA7 (Dig Pin 29) (INPUT)
 //
 //LCD RS: PC1 (Dig Pin 36) (OUTPUT)
@@ -37,7 +37,8 @@
 //vent pot: PF0/ADC0 (Analog Pin 0) (INPUT)
 //
 //DC motor command: PF3 (Analog Pin 2) (OUTPUT)
-//NEED: ADD/FIGURE OUT STEPPER FOR VENT
+//Vent Servo: PC6 (Digital Pin 31) (OUTPUT)
+//NEED: ADD/FIGURE OUT SERVO FOR VENT
 
 // Definitions:
 
@@ -77,19 +78,21 @@ void setup()
 
 void loop()
 {
+  //state is diabled: light yellow LED, wait until enabled
+  //this is a polling solution because the interupt was not working at all
+  while(read_button(7) == 1)
+  {
+    write_pa(0,0);
+    write_pa(1,0);
+    write_pa(2,1);
+    write_pa(3,0);
+  }
   //NEED: to determine how to handle low water error condition. Could use an interupt, or poll state of ball switch pin
   //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
 
   float threshold = 20;
   float water_level = 25;
   float water_threshold = 0;
-  
-  //state is diabled: light yellow LED, wait until enabled
-  // while(diabled)
-  // {
-  //   write_pa(2,1);
-  //   //NEED: wait until enabled
-  // }
 
   //state is error: light red LED, wait until water level restored
   while(water_level <= water_threshold)
@@ -196,6 +199,17 @@ void write_pf(unsigned char pin, unsigned char state)
   
 }
 //NEED: push button handler subroutine. The push button should force state change to disabled (or from disabled to idle)
+int read_button(unsigned char pin_num)
+{
+  if(*pin_c & (1 << pin_num) == (1 << pin_num))
+  {
+    return 1; //return that putton is pushed
+  }
+  else
+  {
+    return 0;
+  }
+}
 
 //NEED: vent motor subroutine. Takes a normalized input value (which will have originated by digital conversion
 //of the potentiometer), drives stepper motor to specific location based on that value, return void
