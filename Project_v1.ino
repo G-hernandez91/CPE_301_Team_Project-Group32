@@ -14,37 +14,39 @@
 
 //as-built circuit inputs as follows:
 //
-//blue LED: PA0 (Dig Pin 22)
-//green LED: PA1 (Dig Pin 23)
-//yellow LED: PA2 (Dig Pin 24)
-//red LED: PA3 (Dig Pin 25)
+//blue LED: PA0 (Dig Pin 22) (OUTPUT)
+//green LED: PA1 (Dig Pin 23) (OUTPUT)
+//yellow LED: PA2 (Dig Pin 24) (OUTPUT)
+//red LED: PA3 (Dig Pin 25) (OUTPUT)
 //
-//ball switch: PA6 (Dig Pin 28)
-//DHT22: PA7 (Dig Pin 29)
+//ball switch: PA6 (Dig Pin 28) (INPUT)
+//DHT22: PA7 (Dig Pin 29) (INPUT)
 //
-//LCD RS: PC1 (Dig Pin 36)
-//LCD enable: PC0 (Dig Pin 37)
+//LCD RS: PC1 (Dig Pin 36) (OUTPUT)
+//LCD enable: PC0 (Dig Pin 37) (OUTPUT)
 //LCD data: PC2:PC5 (Dig Pin 35:32) (labeled backwards on the arduino for no good reason)
 //
-//push button: PC7 (Dig Pin 30)
+//push button: PC7 (Dig Pin 30) (INPUT)
 //
-//vent pot: PF0/ADC0 (Analog Pin 0)
+//vent pot: PF0/ADC0 (Analog Pin 0) (INPUT)
 //
 //NEED: update port register definitions, etc. to reflect built circuit
 //NEED: ADD/FIGURE OUT STEPPER FOR VENT AND DC MOTOR FOR FAN
 
 // Definitions:
 
+//PORT DEFINITIONS
+volatile unsigned char* port_a = (unsigned char*) 0x22;
+volatile unsigned char* ddr_a  = (unsigned char*) 0x21;
+volatile unsigned char* pin_a  = (unsigned char*) 0x20;
+volatile unsigned char* port_c = (unsigned char*) 0x28;
+volatile unsigned char* ddr_c  = (unsigned char*) 0x27;
+volatile unsigned char* pin_c  = (unsigned char*) 0x26;
+
 // TEMP. SENSOR
 #define DHT_SENSOR_TYPE DHT_TYPE_11
 static const int DHT_SENSOR_PIN = 34;
 DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
-
-
-// LEDS
-volatile unsigned char* port_b = (unsigned char*) 0x25;
-volatile unsigned char* ddr_b  = (unsigned char*) 0x24;
-volatile unsigned char* pin_b  = (unsigned char*) 0x23;
 
 // ADC
 volatile unsigned char* my_ADMUX   = (unsigned char*) 0x7C;
@@ -57,7 +59,12 @@ LiquidCrystal lcd (22, 23, 24, 25, 26, 27);
 
 void setup()
 {
-  *ddr_b |= 0x40;
+  //initilize data directions
+  *ddr_a = 0x0F;
+  *ddr_c = 0x3F;
+ 
+  //intilize 
+   
   *port_b &= 0xFF;
   
   //adc_init();                 //Setup the ADC
