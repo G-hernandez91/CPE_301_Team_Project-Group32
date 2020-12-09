@@ -37,7 +37,6 @@
 //vent pot: PF0/ADC0 (Analog Pin 0) (INPUT)
 //
 //DC motor command: PF3 (Analog Pin 2) (OUTPUT)
-//NEED: update port register definitions, etc. to reflect built circuit
 //NEED: ADD/FIGURE OUT STEPPER FOR VENT
 
 // Definitions:
@@ -53,11 +52,6 @@ volatile unsigned char* pin_c  = (unsigned char*) 0x26;
 volatile unsigned char* port_f = (unsigned char*) 0x31;
 volatile unsigned char* ddr_f  = (unsigned char*) 0x30;
 volatile unsigned char* pin_f  = (unsigned char*) 0x2F;
-
-// TEMP. SENSOR
-//#define DHT_SENSOR_TYPE DHT_TYPE_11
-//static const int DHT_SENSOR_PIN = 29;
-//DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 
 // ADC
 volatile unsigned char* my_ADMUX   = (unsigned char*) 0x7C;
@@ -86,9 +80,6 @@ void loop()
   //NEED: to determine how to handle low water error condition. Could use an interupt, or poll state of ball switch pin
   //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
 
-  //initilize variables
-  //float temperature;
-  //float humidity;
   float threshold = 20;
   float water_level = 25;
   float water_threshold = 0;
@@ -115,7 +106,7 @@ void loop()
   }
   
   //pulling humidity and temp data using functions outlined below
-  String dht_str;
+  String dht_str; //I am bad and I feel bad 
   byte hum1, hum2, temp1, temp2;
   dht_req(7);
 	if(dht_resp(7) != 1){
@@ -146,6 +137,7 @@ void loop()
   lcd.print( "%" );
   delay(500);
   lcd.clear();
+  _delay_ms(10);
 
   //state is idle: light green LED, turn off motor
   while(0 <= threshold)
