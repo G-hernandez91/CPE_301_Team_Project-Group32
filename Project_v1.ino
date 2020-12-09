@@ -6,6 +6,9 @@
 //--------------------------------------------------------------------
 // Name:                      Version:                    Date:
 // Guillermo Hernandez        1.0 Created file            12/04/2020
+// Anthony Dyer               1.1 Added/Fixed port disc.  12/08/2020
+// Guillermo Hernandez        1.2 Worked on code          12/08/2020
+// Anthony Dyer               1.3 Worked on code          12/08/2020
 //
 //--------------------------------------------------------------------
 #include <LiquidCrystal.h>    // For LCD display
