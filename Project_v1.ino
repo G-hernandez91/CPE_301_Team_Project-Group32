@@ -43,9 +43,13 @@ volatile unsigned char* port_c = (unsigned char*) 0x28;
 volatile unsigned char* ddr_c  = (unsigned char*) 0x27;
 volatile unsigned char* pin_c  = (unsigned char*) 0x26;
 
+volatile unsigned char* port_f = (unsigned char*) 0x31;
+volatile unsigned char* ddr_f  = (unsigned char*) 0x30;
+volatile unsigned char* pin_f  = (unsigned char*) 0x2F;
+
 // TEMP. SENSOR
 #define DHT_SENSOR_TYPE DHT_TYPE_11
-static const int DHT_SENSOR_PIN = 34;
+static const int DHT_SENSOR_PIN = 29;
 DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 
 // ADC
@@ -55,7 +59,7 @@ volatile unsigned char* my_ADCSRA  = (unsigned char*) 0x7A;
 volatile unsigned int* my_ADC_DATA = (unsigned int*)  0x78;
 
 // LCD
-LiquidCrystal lcd (22, 23, 24, 25, 26, 27);
+LiquidCrystal lcd (37,36,35,34,33,32);
 
 void setup()
 {
