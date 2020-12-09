@@ -12,8 +12,11 @@
 //
 //--------------------------------------------------------------------
 #include <LiquidCrystal.h>    // For LCD display
-//#include <dht_nonblocking.h>   // For Temp. sensor
-// 
+#include <avr/io.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <dht.h>   // For Temp. sensor
+dht DHT;
 
 //as-built circuit inputs as follows:
 //
@@ -72,9 +75,9 @@ void setup()
   *ddr_c = 0x3F;
   *ddr_f = 0x0F;
   
-  //adc_init();
+  //initilize ADC
 
-  // Setup LCD
+  //initilize LCD
   LCD_init();
 }
 
@@ -87,6 +90,8 @@ void loop()
   float temperature;
   float humidity;
   float threshold = 20;
+  float water_level = 25;
+  float water_threshold = 30;
   
   //state is diabled: light yellow LED, wait until enabled
   // while(diabled)
@@ -96,15 +101,18 @@ void loop()
   // }
 
   //state is error: light red LED, wait until water level restored
-  // if(water level low)
-  // {
-  //   //light red LED
-  //   write_pa(3,1);
-  //   //print error message
-  //   lcd.clear();
-  //   lcd.print("     ERROR!        LOW WATER!   ");
-  //   //NEED: wait for water level to be normal again
-  // }
+  while(water_level <= water_threshold)
+  {
+    //light red LED
+    write_pa(3,1);
+
+    //print error message
+    lcd.clear();
+    lcd.print("     ERROR!     ");
+    lcd.setCursor(0,1);
+    lcd.print("   LOW WATER!   ");
+    //NEED: wait for water level to be normal again
+  }
   
   //NEED: read temp and humidity
   temperature = 0;
@@ -131,7 +139,7 @@ void loop()
     write_pa(3,0);
 
     //disable fan motor
-    write_pf(3,0);
+    write_pf(2,0);
     break;
   }
   
@@ -145,7 +153,7 @@ void loop()
     write_pa(3,0);
 
     //enable fan motor
-    write_pf(3,1);
+    write_pf(2,1);
     break;
   }
 
@@ -182,8 +190,6 @@ void write_pf(unsigned char pin, unsigned char state)
 //NEED: vent motor subroutine. Takes a normalized input value (which will have originated by digital conversion
 //of the potentiometer), drives stepper motor to specific location based on that value, return void
 
-//NEED: fan motor subroutine. Should drive fan motor if/only if state is "running." No values passed, rerturn void (drives fan motor)
-
 //LCD ini: wrap initilization into a function call, return void
 void LCD_init()
 {
@@ -191,11 +197,6 @@ void LCD_init()
   lcd.setCursor(0,0);
   lcd.clear();
 }
-
-//NEED: ADC ini and read subroutines:
-  //ADC ini should initilize the ADC
-  //ADC read should return a normalized integer value from the voltage output of the potentiometer (0V-5V). This value will be used to
-  //modulate to position of the stepper motor for the vent
 
 void adc_init()
 {

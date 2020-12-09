@@ -4,14 +4,11 @@
             "name": "Win32",
             "includePath": [
                 "C:\\Program Files (x86)\\Arduino\\tools\\**",
-<<<<<<< HEAD
                 "C:\\Users\\adyer\\OneDrive\\Documents\\Arduino\\libraries\\**",
-=======
-                "C:\\Users\\guill\\OneDrive\\Documents\\Arduino\\libraries\\**",
->>>>>>> eec8b10b4fff070c2a9221c9ee0d7120133b08c9
                 "C:\\Program Files (x86)\\Arduino\\libraries\\**",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\tools\\**",
-                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**"
+                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
+                "C:\\Users\\adyer\\CPE_301_Team_Project-Group32\\**"
             ],
             "forcedInclude": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
@@ -20,10 +17,6 @@
                 "USBCON"
             ],
             "intelliSenseMode": "msvc-x64",
-<<<<<<< HEAD
-=======
-            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/cl.exe",
->>>>>>> eec8b10b4fff070c2a9221c9ee0d7120133b08c9
             "cStandard": "c17",
             "cppStandard": "c++17"
         }
