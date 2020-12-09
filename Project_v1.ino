@@ -98,6 +98,7 @@ void loop()
   
   float temperature;
   float humidity;
+  
   lcd.print( "T = " );
   lcd.print( temperature, 1 );
   lcd.print( " deg. C, H = " );
