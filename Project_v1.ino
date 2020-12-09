@@ -77,16 +77,11 @@ void loop()
 {
   //NEED: to determine how to handle low water error condition. Could use an interupt, or poll state of ball switch pin
   //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
-  
-  //clear LEDs
-  write_pa(0,0);
-  write_pa(1,0);
-  write_pa(2,0);
-  write_pa(3,0);
 
   //initilize variables
   float temperature;
   float humidity;
+  float threshold = 20;
   
   //state is diabled: light yellow LED, wait until enabled
   // while(diabled)
@@ -107,7 +102,7 @@ void loop()
   // }
   
   //NEED: read temp and humidity
-  temperature = 0;
+  temperature = 30;
   humidity = 0;
 
   //print temp and humidity
@@ -122,16 +117,30 @@ void loop()
   lcd.clear();
 
   //state is idle: light green LED, turn off motor
-  // while(temp below threshold)
-  // {
-  //   //disable fan motor
-  // }
+  while(temperature <= threshold)
+  {
+    //light green LED and reset others
+    write_pa(0,0);
+    write_pa(1,1);
+    write_pa(2,0);
+    write_pa(3,0);
+
+    //disable fan motor
+    break;
+  }
   
   //state is running: light blue LED, turn on fan motor
-  // while(temp above threshold)
-  // {
-  //   //enable fan motor
-  // }
+  while(temperature > threshold)
+  {
+    //light blue LED and reset others
+    write_pa(0,1);
+    write_pa(1,0);
+    write_pa(2,0);
+    write_pa(3,0);
+
+    //enable fan motor
+    break;
+  }
 
 }
 
