@@ -59,7 +59,7 @@ volatile unsigned char* my_ADCSRA  = (unsigned char*) 0x7A;
 volatile unsigned int* my_ADC_DATA = (unsigned int*)  0x78;
 
 // LCD
-LiquidCrystal lcd (37,36,35,34,33,32);
+LiquidCrystal lcd (36,37,35,34,33,32);
 
 void setup()
 {
