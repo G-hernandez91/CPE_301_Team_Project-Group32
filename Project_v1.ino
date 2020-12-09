@@ -12,6 +12,27 @@
 #include <dht_nonblocking.h>   // For Temp. sensor
 // 
 
+//as-built circuit inputs as follows:
+//
+//blue LED: PA0 (Dig Pin 22)
+//green LED: PA1 (Dig Pin 23)
+//yellow LED: PA2 (Dig Pin 24)
+//red LED: PA3 (Dig Pin 25)
+//
+//ball switch: PA6 (Dig Pin 28)
+//DHT22: PA7 (Dig Pin 29)
+//
+//LCD RS: PC1 (Dig Pin 36)
+//LCD enable: PC0 (Dig Pin 37)
+//LCD data: PC2:PC5 (Dig Pin 35:32) (labeled backwards on the arduino for no good reason)
+//
+//push button: PC7 (Dig Pin 30)
+//
+//vent pot: PF0/ADC0 (Analog Pin 0)
+//
+//NEED: update port register definitions, etc. to reflect built circuit
+//NEED: ADD/FIGURE OUT STEPPER FOR VENT AND DC MOTOR FOR FAN
+
 // Definitions:
 
 // TEMP. SENSOR
@@ -49,7 +70,20 @@ void setup()
 
 void loop()
 {
-  
+  //NEED: to determine how to handle low water error condition. Could use an interupt, or poll state of ball switch pin
+  //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
+ 
+  //detect whether disabled
+  //state is diabled: light yellow LED, wait until enabled
+
+   //then detect whether water level too low (error)
+   //state is error: light red LED, wait until water level restored
+
+    //then detect whether temperature is below threshold... (idle)
+    //state is idle: light green LED, turn off motor
+    
+    //...or detect whether temperature is above threshold (running)
+    //state is running: light blue LED, turn on fan motor
   
   float temperature;
   float humidity;
@@ -63,6 +97,23 @@ void loop()
 
 }
 
+//NEED: subroutine to light LED. Takes desired pin, return void (writes pin high)
+
+//NEED: push button handler subroutine. The push button should force state change to disabled (or from disabled to idle)
+
+//NEED: vent motor subroutine. Takes a normalized input value (which will have originated by digital conversion
+//of the potentiometer), drives stepper motor to specific location based on that value, return void
+
+//NEED: fan motor subroutine. Should drive fan motor if/only if state is "running." No values passed, rerturn void (drives fan motor)
+
+//NEED: LCD ini and print subroutines:
+  //LCD ini should wrap initilization into a function call, take LCD size as parameter and return void
+  //LCD print should be able to print chars passed to it. We will need to call this to print temp/humidity and the error message
+
+//NEED: ADC ini and read subroutines:
+  //ADC ini should initilize the ADC
+  //ADC read should return a normalized integer value from the voltage output of the potentiometer (0V-5V). This value will be used to
+  //modulate to position of the stepper motor for the vent
 
 void adc_init()
 {
