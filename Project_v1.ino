@@ -46,6 +46,7 @@
 volatile unsigned char* port_a = (unsigned char*) 0x22;
 volatile unsigned char* ddr_a  = (unsigned char*) 0x21;
 volatile unsigned char* pin_a  = (unsigned char*) 0x20;
+
 volatile unsigned char* port_c = (unsigned char*) 0x28;
 volatile unsigned char* ddr_c  = (unsigned char*) 0x27;
 volatile unsigned char* pin_c  = (unsigned char*) 0x26;
@@ -86,11 +87,7 @@ void loop()
   float water_threshold = 0;
   
   //state is diabled: light yellow LED, wait until enabled
-  // while(diabled)
-  // {
-  //   write_pa(2,1);
-  //   //NEED: wait until enabled
-  // }
+  button_switch(*port_c);
 
   //state is error: light red LED, wait until water level restored
   while(water_level <= water_threshold)
@@ -210,11 +207,19 @@ void write_pc(unsigned char pin, unsigned char state)
 
 }
 //NEED: push button handler subroutine. The push button should force state change to disabled (or from disabled to idle)
+<<<<<<< HEAD
 void button_switch(unsigned int sub_switch)
 {
    unsigned int sub_switch = 0;
 
   if(sub_switch == 1)
+=======
+void button_switch(unsigned char _switch)
+{
+   unsigned int sub_switch = 0;
+  
+  if(_switch == 1)
+>>>>>>> 786d35de7fd8d79cde882adc8ba30c064064728e
   {  
     sub_switch = _switch;
   }
