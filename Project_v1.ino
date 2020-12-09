@@ -9,7 +9,7 @@
 //
 //--------------------------------------------------------------------
 #include <LiquidCrystal.h>    // For LCD display
-#include <dht_nonblocking.h>   // For Temp. sensor
+//#include <dht_nonblocking.h>   // For Temp. sensor
 // 
 
 //as-built circuit inputs as follows:
@@ -48,9 +48,9 @@ volatile unsigned char* ddr_f  = (unsigned char*) 0x30;
 volatile unsigned char* pin_f  = (unsigned char*) 0x2F;
 
 // TEMP. SENSOR
-#define DHT_SENSOR_TYPE DHT_TYPE_11
-static const int DHT_SENSOR_PIN = 29;
-DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
+//#define DHT_SENSOR_TYPE DHT_TYPE_11
+//static const int DHT_SENSOR_PIN = 29;
+//DHT_nonblocking dht_sensor( DHT_SENSOR_PIN, DHT_SENSOR_TYPE );
 
 // ADC
 volatile unsigned char* my_ADMUX   = (unsigned char*) 0x7C;
@@ -66,10 +66,6 @@ void setup()
   //initilize data directions
   *ddr_a = 0x0F;
   *ddr_c = 0x3F;
- 
-  //intilize 
-   
-  *port_b &= 0xFF;
   
   //adc_init();
 
@@ -93,22 +89,22 @@ void loop()
   float humidity;
   
   //state is diabled: light yellow LED, wait until enabled
-  while(diabled)
-  {
-    write_pa(2,1);
-    //NEED: wait until enabled
-  }
+  // while(diabled)
+  // {
+  //   write_pa(2,1);
+  //   //NEED: wait until enabled
+  // }
 
   //state is error: light red LED, wait until water level restored
-  if(water level low)
-  {
-    //light red LED
-    write_pa(3,1);
-    //print error message
-    lcd.clear();
-    lcd.print("     ERROR!        LOW WATER!   ");
-    //NEED: wait for water level to be normal again
-  }
+  // if(water level low)
+  // {
+  //   //light red LED
+  //   write_pa(3,1);
+  //   //print error message
+  //   lcd.clear();
+  //   lcd.print("     ERROR!        LOW WATER!   ");
+  //   //NEED: wait for water level to be normal again
+  // }
   
   //NEED: read temp and humidity
   temperature = 0;
@@ -142,11 +138,11 @@ void write_pa(unsigned char pin, unsigned char state)
 {
   if(state == 0)
   {
-    *port_a &= ~(0x01 << pin_num);
+    *port_a &= ~(0x01 << pin);
   }
   else
   {
-    *port_a |= 0x01 << pin_num;
+    *port_a |= 0x01 << pin;
   }
   
 }
