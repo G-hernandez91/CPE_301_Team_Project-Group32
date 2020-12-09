@@ -113,7 +113,9 @@ void loop()
   //print temp and humidity
   lcd.print( "T = " );
   lcd.print( temperature, 1 );
-  lcd.print( " deg. C, H = " );
+  lcd.print( " deg. C," );
+  lcd.setCursor(0,1);
+  lcd.print("H = ");
   lcd.print( humidity, 1 );
   lcd.print( "%" );
   delay(500);
