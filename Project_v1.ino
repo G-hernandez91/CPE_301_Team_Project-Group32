@@ -59,7 +59,7 @@ volatile unsigned char* my_ADCSRA  = (unsigned char*) 0x7A;
 volatile unsigned int* my_ADC_DATA = (unsigned int*)  0x78;
 
 // LCD
-LiquidCrystal lcd (37,36,35,34,33,32);
+LiquidCrystal lcd (36,37,35,34,33,32);
 
 void setup()
 {
@@ -71,33 +71,50 @@ void setup()
    
   *port_b &= 0xFF;
   
-  //adc_init();                 //Setup the ADC
+  //adc_init();
 
   // Setup LCD
-  lcd.begin(16, 2);
-  lcd.print("Display Data");
-  lcd.clear();
+  LCD_init();
 }
 
 void loop()
 {
   //NEED: to determine how to handle low water error condition. Could use an interupt, or poll state of ball switch pin
   //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
- 
-  //detect whether disabled
-  //state is diabled: light yellow LED, wait until enabled
-
-   //then detect whether water level too low (error)
-   //state is error: light red LED, wait until water level restored
-
-    //then detect whether temperature is below threshold... (idle)
-    //state is idle: light green LED, turn off motor
-    
-    //...or detect whether temperature is above threshold (running)
-    //state is running: light blue LED, turn on fan motor
   
+  //clear LEDs
+  write_pa(0,0);
+  write_pa(1,0);
+  write_pa(2,0);
+  write_pa(3,0);
+
+  //initilize variables
   float temperature;
   float humidity;
+  
+  //state is diabled: light yellow LED, wait until enabled
+  while(diabled)
+  {
+    write_pa(2,1);
+    //NEED: wait until enabled
+  }
+
+  //state is error: light red LED, wait until water level restored
+  if(water level low)
+  {
+    //light red LED
+    write_pa(3,1);
+    //print error message
+    lcd.clear();
+    lcd.print("     ERROR!        LOW WATER!   ");
+    //NEED: wait for water level to be normal again
+  }
+  
+  //NEED: read temp and humidity
+  temperature = 0;
+  humidity = 0;
+
+  //print temp and humidity
   lcd.print( "T = " );
   lcd.print( temperature, 1 );
   lcd.print( " deg. C, H = " );
@@ -106,10 +123,33 @@ void loop()
   delay(500);
   lcd.clear();
 
+  //state is idle: light green LED, turn off motor
+  // while(temp below threshold)
+  // {
+  //   //disable fan motor
+  // }
+  
+  //state is running: light blue LED, turn on fan motor
+  // while(temp above threshold)
+  // {
+  //   //enable fan motor
+  // }
+
 }
 
-//NEED: subroutine to light LED. Takes desired pin, return void (writes pin high)
-
+//subroutine to light LED. Takes desired pin, return void (changes pin state)
+void write_pa(unsigned char pin, unsigned char state)
+{
+  if(state == 0)
+  {
+    *port_a &= ~(0x01 << pin_num);
+  }
+  else
+  {
+    *port_a |= 0x01 << pin_num;
+  }
+  
+}
 //NEED: push button handler subroutine. The push button should force state change to disabled (or from disabled to idle)
 
 //NEED: vent motor subroutine. Takes a normalized input value (which will have originated by digital conversion
@@ -117,9 +157,13 @@ void loop()
 
 //NEED: fan motor subroutine. Should drive fan motor if/only if state is "running." No values passed, rerturn void (drives fan motor)
 
-//NEED: LCD ini and print subroutines:
-  //LCD ini should wrap initilization into a function call, take LCD size as parameter and return void
-  //LCD print should be able to print chars passed to it. We will need to call this to print temp/humidity and the error message
+//LCD ini: wrap initilization into a function call, return void
+void LCD_init()
+{
+  lcd.begin(16, 2);
+  lcd.setCursor(0,0);
+  lcd.clear();
+}
 
 //NEED: ADC ini and read subroutines:
   //ADC ini should initilize the ADC
