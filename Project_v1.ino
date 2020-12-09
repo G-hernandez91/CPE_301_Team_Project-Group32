@@ -15,8 +15,8 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <dht.h>   // For Temp. sensor
-dht DHT;
+//#include <dht.h>   // For Temp. sensor
+//dht DHT;
 
 //as-built circuit inputs as follows:
 //
@@ -26,7 +26,7 @@ dht DHT;
 //red LED: PA3 (Dig Pin 25) (OUTPUT)
 //
 //ball switch: PA6 (Dig Pin 28) (INPUT)
-//DHT22: PA7 (Dig Pin 29) (INPUT)
+//DHT11: PA7 (Dig Pin 29) (INPUT)
 //
 //LCD RS: PC1 (Dig Pin 36) (OUTPUT)
 //LCD enable: PC0 (Dig Pin 37) (OUTPUT)
@@ -87,11 +87,11 @@ void loop()
   //NEED: to determine how to handle enabled/disabled condition. Could use an interupt, or poll state of push button pin
 
   //initilize variables
-  float temperature;
-  float humidity;
+  //float temperature;
+  //float humidity;
   float threshold = 20;
   float water_level = 25;
-  float water_threshold = 30;
+  float water_threshold = 0;
   
   //state is diabled: light yellow LED, wait until enabled
   // while(diabled)
@@ -114,23 +114,41 @@ void loop()
     //NEED: wait for water level to be normal again
   }
   
-  //NEED: read temp and humidity
-  temperature = 0;
-  humidity = 0;
+  //pulling humidity and temp data using functions outlined below
+  String dht_str;
+  byte hum1, hum2, temp1, temp2;
+  dht_req(7);
+	if(dht_resp(7) != 1){
+    hum1 = dht_data(7);
+    hum2 = dht_data(7);
+    temp1 = dht_data(7);
+    temp2 = dht_data(7);
+  }
+  //temperature = 0;
+  //humidity = 0;
 
   //print temp and humidity
+  dht_str = String(temp1);
   lcd.print( "T = " );
-  lcd.print( temperature, 1 );
+  lcd.print(dht_str);
+  lcd.print(".");
+  dht_str = String(temp2);
+	lcd.print(dht_str);
   lcd.print( " deg. C," );
+
   lcd.setCursor(0,1);
-  lcd.print("H = ");
-  lcd.print( humidity, 1 );
+  dht_str = String(hum1);
+  lcd.print( "H = " );
+  lcd.print(dht_str);
+  lcd.print(".");
+  dht_str = String(hum2);
+	lcd.print(dht_str);
   lcd.print( "%" );
   delay(500);
   lcd.clear();
 
   //state is idle: light green LED, turn off motor
-  while(temperature <= threshold)
+  while(0 <= threshold)
   {
     //light green LED and reset others
     write_pa(0,0);
@@ -144,7 +162,7 @@ void loop()
   }
   
   //state is running: light blue LED, turn on fan motor
-  while(temperature > threshold)
+  while(0 > threshold)
   {
     //light blue LED and reset others
     write_pa(0,1);
@@ -189,6 +207,54 @@ void write_pf(unsigned char pin, unsigned char state)
 
 //NEED: vent motor subroutine. Takes a normalized input value (which will have originated by digital conversion
 //of the potentiometer), drives stepper motor to specific location based on that value, return void
+
+//DHT request
+void dht_req(unsigned char pin_num)
+{
+	*ddr_a |= (1<<pin_num);
+	*port_a &= ~(1<<pin_num);	
+	_delay_ms(20);
+	*port_a |= (1<<pin_num);
+}
+
+//DHT response handler
+int dht_resp(unsigned char pin_num)
+{
+	*ddr_a &= ~(1<<pin_num);
+  _delay_us(40);
+  if((*pin_a & (1<<pin_num)))
+  {
+    return 1;
+  }
+  _delay_us(80);
+  if(!(*pin_a & (1<<pin_num)))
+  {
+    return 1;
+  }
+  _delay_us(80);
+  return 0;
+}
+
+//dht data setup
+byte dht_data(unsigned char pin_num)
+{	
+  byte dat = 0;
+	for (int i=0; i<8; i++)
+	{
+		while((*pin_a & (1<<pin_num)) == 0);
+		_delay_us(30);
+		if(*pin_a & (1<<pin_num)) //if a high pulse is sent after 30ms
+    {
+		  dat = (dat<<1)|(0x01); //shift a 1 into dat
+    }
+    else
+    {
+      dat = (dat<<1); //else shift to make a 0
+    }
+		while(*pin_a & (1<<pin_num));
+	}
+	return dat;
+}
 
 //LCD ini: wrap initilization into a function call, return void
 void LCD_init()
