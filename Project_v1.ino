@@ -6,13 +6,9 @@
 //--------------------------------------------------------------------
 // Name:                      Version:                    Date:
 // Guillermo Hernandez        1.0 Created file            12/04/2020
-<<<<<<< HEAD
-// Anthony Dyer                                           12/08/2020
-=======
 // Anthony Dyer               1.1 Added/Fixed port disc.  12/08/2020
 // Guillermo Hernandez        1.2 Worked on code          12/08/2020
 // Anthony Dyer               1.3 Worked on code          12/08/2020
->>>>>>> 87d3dd20af4a2b0a7f7b5e25e81060fd34fc3227
 //
 //--------------------------------------------------------------------
 #include <LiquidCrystal.h>    // For LCD display
@@ -90,7 +86,6 @@ void loop()
   //initilize variables
   float temperature;
   float humidity;
-<<<<<<< HEAD
   float threshold = 20;
   
   //state is diabled: light yellow LED, wait until enabled
@@ -116,9 +111,6 @@ void loop()
   humidity = 0;
 
   //print temp and humidity
-=======
-  
->>>>>>> eec8b10b4fff070c2a9221c9ee0d7120133b08c9
   lcd.print( "T = " );
   lcd.print( temperature, 1 );
   lcd.print( " deg. C," );
